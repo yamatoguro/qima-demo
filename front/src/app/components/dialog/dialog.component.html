@@ -1,12 +1,12 @@
 <h1 mat-dialog-title>{{data.title}}</h1>
 <div mat-dialog-content>
-  <p>{{data.text}}</p>
-  <mat-form-field *ngIf="data.dialogType === INPUT_DIALOG">
-    <mat-label>Justificativa</mat-label>
+  <div *ngIf="data.dialogType != INPUT_DIALOG">{{data.text}}</div>
+  <mat-form-field style="width: 350px;" *ngIf="data.dialogType === INPUT_DIALOG">
+    <mat-label>{{data.text}}</mat-label>
     <input matInput [(ngModel)]="data.data">
   </mat-form-field>
 </div>
 <div mat-dialog-actions>
-  <button *ngIf="data.dialogType != SIMPLE_DIALOG && data.dialogType != ALERT_DIALOG" mat-raised-button color="primary" style="background-color: #db202f;" (click)="onNoClick()" [mat-dialog-close]="data">{{data.close}}</button>
-  <button *ngIf="data.dialogType != SIMPLE_DIALOG" mat-raised-button color="primary" style="background-color: #09C009;" [mat-dialog-close]="data" (click)="onYesClick()" cdkFocusInitial>{{data.save}}</button>
+  <button *ngIf="data.dialogType != SIMPLE_DIALOG && data.dialogType != ALERT_DIALOG" mat-flat-button style="color: white; background-color: #db202f;" (click)="onNoClick()" [mat-dialog-close]="data">{{data.close}}</button>
+  <button *ngIf="data.dialogType != SIMPLE_DIALOG" mat-flat-button style="color: white; background-color: #09C009;" [mat-dialog-close]="data" (click)="onYesClick()" cdkFocusInitial>{{data.save}}</button>
 </div>

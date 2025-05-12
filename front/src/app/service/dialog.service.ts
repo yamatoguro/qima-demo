@@ -18,8 +18,8 @@ export class DialogService {
     buttonClose: any,
     buttonSave: any,
     data: any,
-    method: any
-  ): void {
+    method: Function
+  ) {
     const dialogRef = this.dialog.open(DialogComponent, {
       width: '400px',
       data: {
@@ -39,9 +39,17 @@ export class DialogService {
       data = result.confirm;
       method(data);
     });
+    return dialogRef;
   }
 
-  openInputDialog(title: any, content: any, buttonClose: any, buttonSave: any, data: any, method: any): void {
+  openInputDialog(
+    title: any,
+    content: any,
+    buttonClose: any,
+    buttonSave: any,
+    data: any,
+    method: Function
+  ): void {
     const dialogRef = this.dialog.open(DialogComponent, {
       width: '400px',
       data: {
@@ -59,12 +67,19 @@ export class DialogService {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      data = result;
-      method();
+      data = result.data;
+      if (result.confirm) {
+        method(result.data);
+      }
     });
   }
 
-  openAlertDialog(title: any, content: any, buttonSave: any, method: any): void {
+  openAlertDialog(
+    title: any,
+    content: any,
+    buttonSave: any,
+    method: Function
+  ): void {
     const dialogRef = this.dialog.open(DialogComponent, {
       width: '400px',
       data: {
@@ -84,7 +99,7 @@ export class DialogService {
     dialogRef.afterClosed().subscribe((result) => {});
   }
 
-  openSimpleDialog(title: any, content: any, method: any): void {
+  openSimpleDialog(title: any, content: any, method: Function): void {
     const dialogRef = this.dialog.open(DialogComponent, {
       width: '400px',
       data: {

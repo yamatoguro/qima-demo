@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
 import {
   MAT_DIALOG_DATA,
   MatDialogModule,
@@ -20,7 +21,7 @@ export interface DialogData {
 
 @Component({
   selector: 'app-dialog',
-  imports: [CommonModule, MatInputModule, MatDialogModule, FormsModule],
+  imports: [CommonModule, MatInputModule, MatDialogModule, FormsModule, MatButtonModule],
   templateUrl: './dialog.component.html',
   styleUrls: ['./dialog.component.scss'],
 })

@@ -1,0 +1,28 @@
+<div class="container">
+  <h1>
+    Login
+  </h1>
+  <mat-grid-list cols="3" rowHeight="60px" [gutterSize]="'10px'">
+    <mat-grid-tile [colspan]="1" [rowspan]="1"></mat-grid-tile>
+    <mat-grid-tile [colspan]="1" [rowspan]="1">
+      <mat-form-field style="width: 500px; margin-top: 15px;">
+        <mat-label>Username</mat-label>
+        <input matInput type="text" [(ngModel)]="credentials.username">
+      </mat-form-field>
+    </mat-grid-tile>
+    <mat-grid-tile [colspan]="1" [rowspan]="1"></mat-grid-tile>
+    <mat-grid-tile [colspan]="1" [rowspan]="1"></mat-grid-tile>
+    <mat-grid-tile [colspan]="1" [rowspan]="1">
+      <mat-form-field style="width: 500px; margin-top: 15px;">
+        <mat-label>Password</mat-label>
+        <input matInput type="password" [(ngModel)]="credentials.password">
+      </mat-form-field>
+    </mat-grid-tile>
+    <mat-grid-tile [colspan]="1" [rowspan]="1"></mat-grid-tile>
+    <mat-grid-tile [colspan]="1" [rowspan]="1"></mat-grid-tile>
+    <mat-grid-tile [colspan]="1" [rowspan]="1">
+      <button mat-flat-button (click)="login()">Login</button>
+    </mat-grid-tile>
+    <mat-grid-tile [colspan]="1" [rowspan]="1"></mat-grid-tile>
+  </mat-grid-list>
+</div>

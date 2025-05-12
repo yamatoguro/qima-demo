@@ -1,0 +1,38 @@
+<div mat-dialog style="background-color: dimgrey;">
+  <h1 mat-dialog-title>Category Settings</h1>
+  <mat-dialog-content>
+    <ng-template mat-tab-label>
+      <mat-icon class="example-tab-icon">menu</mat-icon>
+      Category List
+    </ng-template>
+    <mat-form-field>
+      <mat-label>Filter</mat-label>
+      <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ium" #input>
+    </mat-form-field>
+    <mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+      <ng-container matColumnDef="position">
+        <mat-header-cell *matHeaderCellDef> ID </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.idCategory}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="name">
+        <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="actions">
+        <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <button mat-flat-button style="color: white; background-color: #db202f;" (click)="deleteCategory(element)">Delete</button>&nbsp;
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+  </mat-dialog-content>
+  <br>
+  <div mat-dialog-actions style="float: right; margin-left: auto;">
+    <button mat-flat-button style="color: white; background-color: #db202f;" (click)="close()" [mat-dialog-close]="dataSource">Close</button>&nbsp;
+    <button mat-flat-button style="color: white; background-color: #09C009;" (click)="newCategory()" cdkFocusInitial>New Category</button>
+  </div>
+  <br>
+</div>
