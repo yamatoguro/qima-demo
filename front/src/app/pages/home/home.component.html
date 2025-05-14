@@ -87,7 +87,7 @@
   </mat-grid-list>
   <!-- Infinite scroll loading indicator -->
   <div *ngIf="loading" style="text-align:center; margin: 20px;">
-    <mat-spinner></mat-spinner>
+    <mat-spinner class="progressSpinner"></mat-spinner>
   </div>
   <div *ngIf="lastPage && data.length > 0" style="text-align:center; margin: 20px;">
     <span>No more products to load.</span>

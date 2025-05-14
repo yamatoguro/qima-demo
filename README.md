@@ -156,6 +156,8 @@ My name is **Iago**, a fullstack developer with a decade of experience. In this 
 
 One of the main challenges I faced was implementing the security layer, especially ensuring robust JWT authentication and role-based authorization. However, this was quickly overcome, and the result is a secure, extensible, and user-friendly application.
 
+There is a problem on UI that I had not enough time to fix, if you face an endless loading you can just click on any input and out, so it will work as intended after that.
+
 Feel free to explore the code and reach out to me on [GitHub](https://github.com/yamatoguro) for any questions or collaboration opportunities!
 
 ---
