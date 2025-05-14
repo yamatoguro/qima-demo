@@ -20,7 +20,7 @@ public class ProductService {
 
     public Product updateProduct(long id, Product p) {
         Product p0 = repository.findById(id).get();
-        p0.setIdProduct(p.getIdProduct());
+        p0.setId_product(p.getId_product());
         p0.setName(p.getName());
         p0.setPrice(p.getPrice());
         p0.setAvailable(p.getAvailable());

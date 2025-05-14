@@ -17,8 +17,8 @@ import lombok.Setter;
 @Table(name = "product")
 public class Product {
 
-    @Id @GeneratedValue(strategy = GenerationType.AUTO) @Column(name = "idProduct")
-    private @Getter @Setter long idProduct;
+    @Id @GeneratedValue(strategy = GenerationType.AUTO) @Column(name = "id_product")
+    private @Getter @Setter long id_product;
     private @Getter @Setter @Column(name = "name") String name;
     private @Getter @Setter @Column(name = "price") double price;
     private @Getter @Setter @Column(name = "available") int available;

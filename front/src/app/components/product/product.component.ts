@@ -48,7 +48,7 @@ export interface DialogData {
 })
 export class ProductComponent {
   product: Product = {
-    idProduct: 0,
+    id_product: 0,
     name: '',
     available: 0,
     price: 0.01,

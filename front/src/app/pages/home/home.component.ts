@@ -20,6 +20,7 @@ import { DialogService } from '../../service/dialog.service';
 import { ProductService } from '../../service/product.service';
 import { Category } from '../../model/category';
 import { Product } from '../../model/product';
+import { MatSelectModule } from '@angular/material/select';
 
 @Component({
   selector: 'app-home',
@@ -35,6 +36,7 @@ import { Product } from '../../model/product';
     MatButtonModule,
     MatIconModule,
     MatDividerModule,
+    MatSelectModule,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
@@ -45,9 +47,10 @@ export class HomeComponent {
   data: Product[] = [];
   unfiltered: Product[] = [];
   categories: Category[] = [];
-  value: any;
+  valueFilter: any;
   sort: any = 'name';
   lastSort: any = 'name';
+  categoyFilter: any;
 
   constructor(
     private dialogService: DialogService,
@@ -82,7 +85,7 @@ export class HomeComponent {
 
   getCategoryName(id: number) {
     let label = '';
-    label = this.categories.filter((e) => e.idCategory === id).at(0)!.name;
+    label = this.categories.filter((e) => e.id_category === id).at(0)!.name;
     return label;
   }
 
@@ -105,7 +108,7 @@ export class HomeComponent {
       .subscribe((result) => {
         if (result.confirm)
           this.productService
-            .deleteProduct(element.idProduct)
+            .deleteProduct(element.id_product)
             .subscribe(() => location.reload());
       });
   }
@@ -113,17 +116,23 @@ export class HomeComponent {
   applyFilter() {
     this.data = this.unfiltered.filter(
       (e) =>
-        e.name.includes(this.value) ||
-        this.getCategoryName(e.category).includes(this.value) ||
-        e.description?.includes(this.value) ||
-        (e.price + '').includes(this.value) ||
-        (e.price + '').includes(this.value) ||
-        (e.available + '').includes(this.value)
+        e.name.includes(this.valueFilter) ||
+        this.getCategoryName(e.category).includes(this.valueFilter) ||
+        e.description?.includes(this.valueFilter) ||
+        (e.price + '').includes(this.valueFilter) ||
+        (e.price + '').includes(this.valueFilter) ||
+        (e.available + '').includes(this.valueFilter)
     );
   }
 
+  filterByCategory() {
+    this.valueFilter = this.categoyFilter;
+    this.applyFilter();
+  }
+
   clearFilter() {
-    this.value = '';
+    this.valueFilter = '';
+    this.categoyFilter = '';
     this.data = this.unfiltered;
     this.sort = 'name';
   }
@@ -135,7 +144,7 @@ export class HomeComponent {
           this.data = this.unfiltered.sort((e0, e1) =>
             e1.name.localeCompare(e0.name)
           );
-          this.lastSort = "reset";
+          this.lastSort = 'reset';
         } else {
           this.data = this.unfiltered.sort((e0, e1) =>
             e0.name.localeCompare(e1.name)
@@ -150,7 +159,7 @@ export class HomeComponent {
               this.getCategoryName(e0.category)
             )
           );
-          this.lastSort = "reset";
+          this.lastSort = 'reset';
         } else {
           this.data = this.unfiltered.sort((e0, e1) =>
             this.getCategoryName(e0.category).localeCompare(
@@ -165,7 +174,7 @@ export class HomeComponent {
           this.data = this.unfiltered.sort((e0, e1) =>
             e1.price.toPrecision(21).localeCompare(e0.price.toPrecision(21))
           );
-          this.lastSort = "reset";
+          this.lastSort = 'reset';
         } else {
           this.data = this.unfiltered.sort((e0, e1) =>
             e0.price.toPrecision(21).localeCompare(e1.price.toPrecision(21))
@@ -178,7 +187,7 @@ export class HomeComponent {
           this.data = this.unfiltered.sort(
             (e0, e1) => e1.available - e0.available
           );
-          this.lastSort = "reset";
+          this.lastSort = 'reset';
         } else {
           this.data = this.unfiltered.sort(
             (e0, e1) => e0.available - e1.available

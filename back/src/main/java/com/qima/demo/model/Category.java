@@ -20,6 +20,6 @@ public class Category {
     }
 
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
-    private @Getter @Setter @Column(name = "idCategory") long idCategory;
+    private @Getter @Setter @Column(name = "id_category") long id_category;
     private @Getter @Setter @Column(name = "name") String name;
 }

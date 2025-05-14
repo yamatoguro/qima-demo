@@ -1,5 +1,5 @@
-<h1 matDialogTitle *ngIf="product.idProduct === 0">New Product</h1>
-<h1 matDialogTitle *ngIf="product.idProduct != 0">Edit Product</h1>
+<h1 matDialogTitle *ngIf="product.id_product === 0">New Product</h1>
+<h1 matDialogTitle *ngIf="product.id_product != 0">Edit Product</h1>
 
 <mat-dialog-content>
   <mat-form-field class="mat-mdc-form-field">
@@ -10,7 +10,7 @@
     <mat-label>Category</mat-label>
     <mat-select [(value)]="product.category">
       @for (c of categories; track product.category) {
-      <mat-option [value]="c.idCategory">{{c.name}}</mat-option>
+      <mat-option [value]="c.id_category">{{c.name}}</mat-option>
       }
     </mat-select>
   </mat-form-field>
@@ -39,6 +39,6 @@
 
 <mat-dialog-actions align="end">
   <button mat-flat-button style="color: white; background-color: #db202f;" matDialogClose>Cancel</button>
-  <button mat-flat-button style="color: white; background-color: #09C009;" matDialogClose *ngIf="product.idProduct === 0" (click)="newProduct(product)">Create</button>
-  <button mat-flat-button style="color: white; background-color: #ffaa00;" matDialogClose *ngIf="product.idProduct != 0" (click)="updateProduct(product)">Edit</button>
+  <button mat-flat-button style="color: white; background-color: #09C009;" matDialogClose *ngIf="product.id_product === 0" (click)="newProduct(product)">Create</button>
+  <button mat-flat-button style="color: white; background-color: #ffaa00;" matDialogClose *ngIf="product.id_product != 0" (click)="updateProduct(product)">Edit</button>
 </mat-dialog-actions>

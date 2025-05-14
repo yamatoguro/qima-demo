@@ -6,6 +6,8 @@ import { Observable } from 'rxjs';
 import { Product } from './../model/product';
 import { ProductComponent } from '../components/product/product.component';
 
+const token = localStorage.getItem('jwt');
+
 @Injectable({
   providedIn: 'root',
 })
@@ -18,8 +20,8 @@ export class ProductService {
     const dialogRef = this.dialog.open(ProductComponent, {
       width: '600px',
       data: {
-        id: p?.idProduct
-      }
+        id: p?.id_product,
+      },
     });
 
     dialogRef.backdropClick().subscribe(() => {
@@ -34,12 +36,19 @@ export class ProductService {
   }
 
   getProducts(): Observable<Product[]> {
-    const headers = new HttpHeaders().append('X-API-KEY', environment.apikey);
-    return this.http.get<Product[]>(this.url);
+    return this.http.get<Product[]>(this.url, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
   }
 
   deleteProduct(id: number) {
-    return this.http.delete(this.url + '/' + id);
+    return this.http.delete(this.url + '/' + id, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
   }
 
   newProduct(p: Product) {
@@ -50,7 +59,12 @@ export class ProductService {
       .append('available', p.available)
       .append('description', p.description!)
       .append('category', p.category + '');
-    return this.http.post(this.url, null, { params: params });
+    return this.http.post(this.url, null, {
+      params: params,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
   }
 
   updateProduct(p: Product) {
@@ -61,8 +75,11 @@ export class ProductService {
       .append('available', p.available)
       .append('description', p.description!)
       .append('category', p.category + '');
-    return this.http.put(this.url + '/' + p.idProduct, null, {
+    return this.http.put(this.url + '/' + p.id_product, null, {
       params: params,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     });
   }
 

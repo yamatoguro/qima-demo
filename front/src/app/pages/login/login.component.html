@@ -1,28 +1,92 @@
-<div class="container">
-  <h1>
-    Login
-  </h1>
+<div class="container" *ngIf="!isRegistering">
+  <h1>Login</h1>
   <mat-grid-list cols="3" rowHeight="60px" [gutterSize]="'10px'">
-    <mat-grid-tile [colspan]="1" [rowspan]="1"></mat-grid-tile>
-    <mat-grid-tile [colspan]="1" [rowspan]="1">
+    <mat-grid-tile></mat-grid-tile>
+    <mat-grid-tile>
       <mat-form-field style="width: 500px; margin-top: 15px;">
         <mat-label>Username</mat-label>
-        <input matInput type="text" [(ngModel)]="credentials.username">
+        <input matInput type="text" [(ngModel)]="credentials.username" name="username">
       </mat-form-field>
     </mat-grid-tile>
-    <mat-grid-tile [colspan]="1" [rowspan]="1"></mat-grid-tile>
-    <mat-grid-tile [colspan]="1" [rowspan]="1"></mat-grid-tile>
-    <mat-grid-tile [colspan]="1" [rowspan]="1">
+    <mat-grid-tile></mat-grid-tile>
+    <mat-grid-tile></mat-grid-tile>
+    <mat-grid-tile>
       <mat-form-field style="width: 500px; margin-top: 15px;">
         <mat-label>Password</mat-label>
-        <input matInput type="password" [(ngModel)]="credentials.password">
+        <input matInput type="password" [(ngModel)]="credentials.password" name="password">
       </mat-form-field>
     </mat-grid-tile>
-    <mat-grid-tile [colspan]="1" [rowspan]="1"></mat-grid-tile>
-    <mat-grid-tile [colspan]="1" [rowspan]="1"></mat-grid-tile>
-    <mat-grid-tile [colspan]="1" [rowspan]="1">
-      <button mat-flat-button (click)="login()">Login</button>
+    <mat-grid-tile></mat-grid-tile>
+    <mat-grid-tile></mat-grid-tile>
+    <mat-grid-tile>
+      <button mat-fab extended color="primary" style="color: white;" (click)="onLogin()">
+        <mat-icon>login</mat-icon>
+        Login
+      </button>
+      &nbsp;
+      <button mat-fab extended style="color: white;" (click)="signup()">
+        <mat-icon>person_add</mat-icon>
+        Register
+      </button>
     </mat-grid-tile>
-    <mat-grid-tile [colspan]="1" [rowspan]="1"></mat-grid-tile>
+    <mat-grid-tile></mat-grid-tile>
   </mat-grid-list>
+  <div *ngIf="loginError" style="color: red; margin-top: 10px;">
+    {{ loginError }}
+  </div>
+</div>
+
+<div class="container" *ngIf="isRegistering">
+  <h1>Register</h1>
+  <form [formGroup]="registerForm">
+    <mat-grid-list cols="3" rowHeight="80px" gutterSize="10px">
+      <mat-grid-tile></mat-grid-tile>
+      <mat-grid-tile>
+        <mat-form-field style="width: 500px; margin-top: 15px;">
+          <mat-label>Name</mat-label>
+          <input matInput formControlName="name"/>
+        </mat-form-field>
+      </mat-grid-tile>
+      <mat-grid-tile></mat-grid-tile>
+      <mat-grid-tile></mat-grid-tile>
+      <mat-grid-tile>
+        <mat-form-field style="width: 500px; margin-top: 15px;">
+          <mat-label>Username</mat-label>
+          <input matInput formControlName="username" placeholder="Digite seu usuário" />
+        </mat-form-field>
+      </mat-grid-tile>
+      <mat-grid-tile></mat-grid-tile>
+      <mat-grid-tile></mat-grid-tile>
+      <mat-grid-tile>
+        <mat-form-field style="width: 500px; margin-top: 15px;">
+          <mat-label>Password</mat-label>
+          <input matInput type="password" formControlName="password"/>
+        </mat-form-field>
+      </mat-grid-tile>
+      <mat-grid-tile></mat-grid-tile>
+      <mat-grid-tile></mat-grid-tile>
+      <mat-grid-tile>
+        <mat-form-field style="width: 500px; margin-top: 15px;">
+          <mat-label>Role</mat-label>
+          <mat-select formControlName="roles" placeholder="Select the roles" multiple>
+            <mat-option value="ADMIN">Admin</mat-option>
+            <mat-option value="USER">User</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </mat-grid-tile>
+      <mat-grid-tile></mat-grid-tile>
+      <mat-grid-tile></mat-grid-tile>
+      <mat-grid-tile>
+        <button mat-button (click)="login()">
+          Already have an Account
+        </button>
+        &nbsp;
+        <button mat-fab extended color="primary" (click)="onSubmit()">
+          <mat-icon>person_add</mat-icon>
+          Signup
+        </button>
+      </mat-grid-tile>
+      <mat-grid-tile></mat-grid-tile>
+    </mat-grid-list>
+  </form>
 </div>

@@ -1,11 +1,26 @@
 <section style="color: black;">
   <br>
-  <mat-grid-list cols="4" rowHeight="fit" [style.height]="'80px'" [gutterSize]="'1px'">
+  <mat-grid-list cols="6" rowHeight="fit" [style.height]="'80px'" [gutterSize]="'1px'">
     <mat-grid-tile [colspan]="2" [rowspan]="1">
       <mat-form-field style="width: 500px; margin-top: 15px;">
         <mat-label>Filter Products</mat-label>
-        <input matInput type="text" #filterInput [(ngModel)]="value" (keyup)="applyFilter()"/>
-        @if (value) {
+        <input matInput type="text" #filterInput [(ngModel)]="valueFilter" (keyup)="applyFilter()" />
+        @if (valueFilter) {
+        <button matSuffix mat-icon-button aria-label="Clear" (click)="clearFilter()">
+          <mat-icon>close</mat-icon>
+        </button>
+        }
+      </mat-form-field>
+    </mat-grid-tile>
+    <mat-grid-tile [colspan]="1" [rowspan]="1">
+      <mat-form-field class="mat-mdc-form-field" style="margin-top: 15px;">
+        <mat-label>Filter By Category</mat-label>
+        <mat-select [(ngModel)]="categoyFilter" (ngModelChange)="filterByCategory()">
+          @for (c of categories; track categoyFilter) {
+          <mat-option [value]="c.name">{{c.name}}</mat-option>
+          }
+        </mat-select>
+        @if (categoyFilter) {
         <button matSuffix mat-icon-button aria-label="Clear" (click)="clearFilter()">
           <mat-icon>close</mat-icon>
         </button>
@@ -23,14 +38,18 @@
         Categories
       </button>
     </mat-grid-tile>
-    <mat-grid-tile [colspan]="1" [rowspan]="1">
+    <mat-grid-tile [colspan]="2" [rowspan]="1">
       <h3>Sort Products:</h3>
       &nbsp;
       <mat-button-toggle-group name="sorting" aria-label="Sort Products" [(ngModel)]="sort">
-        <mat-button-toggle ngDefaultControl style="color: black;" value="name" (click)="sortProducts(lastSort)">Name</mat-button-toggle>
-        <mat-button-toggle ngDefaultControl style="color: black;" value="category" (click)="sortProducts(lastSort)">Category</mat-button-toggle>
-        <mat-button-toggle ngDefaultControl style="color: black;" value="price" (click)="sortProducts(lastSort)">Price</mat-button-toggle>
-        <mat-button-toggle ngDefaultControl style="color: black;" value="available" (click)="sortProducts(lastSort)">Available</mat-button-toggle>
+        <mat-button-toggle ngDefaultControl style="color: black;" value="name" (click)="sortProducts(lastSort)">Name
+        </mat-button-toggle>
+        <mat-button-toggle ngDefaultControl style="color: black;" value="category" (click)="sortProducts(lastSort)">
+          Category</mat-button-toggle>
+        <mat-button-toggle ngDefaultControl style="color: black;" value="price" (click)="sortProducts(lastSort)">Price
+        </mat-button-toggle>
+        <mat-button-toggle ngDefaultControl style="color: black;" value="available" (click)="sortProducts(lastSort)">
+          Available</mat-button-toggle>
       </mat-button-toggle-group>
     </mat-grid-tile>
   </mat-grid-list>

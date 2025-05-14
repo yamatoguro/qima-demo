@@ -110,7 +110,7 @@ export class CategoryComponent {
       .afterClosed()
       .subscribe((result) => {
         if (result.confirm)
-          this.categoryService.deleteCategory(element.idCategory).subscribe(() =>  this.getCategories());
+          this.categoryService.deleteCategory(element.id_category).subscribe(() =>  this.getCategories());
       });
   }
 
