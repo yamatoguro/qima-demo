@@ -7,8 +7,6 @@ import { Product } from './../model/product';
 import { ProductComponent } from '../components/product/product.component';
 import { map } from 'rxjs/operators';
 
-const token = localStorage.getItem('jwt');
-
 @Injectable({
   providedIn: 'root',
 })
@@ -33,7 +31,12 @@ export class ProductService {
   }
 
   getProduct(id: number) {
-    return this.http.get(this.url + '/' + id);
+    const token = localStorage.getItem('jwt');
+    return this.http.get(this.url + '/' + id, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
   }
 
   /**
@@ -44,6 +47,7 @@ export class ProductService {
    * @param sort campo de ordenação (ex: 'name,asc' ou 'price,desc')
    */
   getProducts(page: number, size: number, valueFilter?: string, sort: string = 'name,asc') {
+    const token = localStorage.getItem('jwt');
     let params = new HttpParams()
       .set('page', page)
       .set('size', size)
@@ -73,10 +77,11 @@ export class ProductService {
    * @param sort campo de ordenação (ex: 'name,asc' ou 'price,desc')
    */
   getProductsByCategory(page: number, size: number, categoryId: number, valueFilter?: string, sort: string = 'name,asc') {
+    const token = localStorage.getItem('jwt');
     let params = new HttpParams()
       .set('page', page)
       .set('size', size)
-      .set('sort', sort)
+      .set('sort', sort);
 
     let endpoint = this.url + '/category/' + categoryId;
 
@@ -93,6 +98,7 @@ export class ProductService {
   }
 
   deleteProduct(id: number) {
+    const token = localStorage.getItem('jwt');
     return this.http.delete(this.url + '/' + id, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -101,6 +107,7 @@ export class ProductService {
   }
 
   newProduct(p: Product) {
+    const token = localStorage.getItem('jwt');
     if (this.isEmpty(p.description)) p.description = '';
     const params = new HttpParams()
       .append('name', p.name)
@@ -117,6 +124,7 @@ export class ProductService {
   }
 
   updateProduct(p: Product) {
+    const token = localStorage.getItem('jwt');
     if (this.isEmpty(p.description)) p.description = '';
     const params = new HttpParams()
       .append('name', p.name)

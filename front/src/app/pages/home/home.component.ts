@@ -6,6 +6,7 @@ import {
   ViewChild,
   OnInit,
   HostListener,
+  ChangeDetectorRef,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -70,7 +71,8 @@ export class HomeComponent implements OnInit {
   constructor(
     private dialogService: DialogService,
     private categoryService: CategoryService,
-    private productService: ProductService
+    private productService: ProductService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -111,6 +113,7 @@ export class HomeComponent implements OnInit {
         this.lastPage = result.last;
         this.loading = false;
         this.page++;
+        this.cdr.markForCheck();
       });
   }
 

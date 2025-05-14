@@ -8,7 +8,6 @@ import { DialogService } from './dialog.service';
 import { Observable } from 'rxjs';
 import { Category } from '../model/category';
 
-const token = localStorage.getItem('jwt');
 @Injectable({
   providedIn: 'root',
 })
@@ -30,6 +29,7 @@ export class CategoryService {
   }
 
   getCategories(): Observable<Category[]> {
+    const token = localStorage.getItem('jwt');
     return this.http.get<Category[]>(this.url, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -38,6 +38,7 @@ export class CategoryService {
   }
 
   deleteCategory(id: number) {
+    const token = localStorage.getItem('jwt');
     return this.http.delete(this.url + '/' + id, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -46,6 +47,7 @@ export class CategoryService {
   }
 
   newCategory(name: string) {
+    const token = localStorage.getItem('jwt');
     const params = new HttpParams().append('name', name);
     return this.http.request('POST', this.url, {
       params: params,
