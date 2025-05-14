@@ -74,5 +74,7 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
-localDB.mv.db
+*.db
 /back/localDB.mv.db
+/back/logs
+/back/logs/*
