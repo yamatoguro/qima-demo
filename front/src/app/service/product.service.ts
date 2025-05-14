@@ -5,6 +5,7 @@ import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
 import { Product } from './../model/product';
 import { ProductComponent } from '../components/product/product.component';
+import { map } from 'rxjs/operators';
 
 const token = localStorage.getItem('jwt');
 
@@ -35,8 +36,56 @@ export class ProductService {
     return this.http.get(this.url + '/' + id);
   }
 
-  getProducts(): Observable<Product[]> {
-    return this.http.get<Product[]>(this.url, {
+  /**
+   * Busca produtos paginados, com filtro e ordenação.
+   * @param page número da página
+   * @param size tamanho da página
+   * @param valueFilter filtro de texto
+   * @param sort campo de ordenação (ex: 'name,asc' ou 'price,desc')
+   */
+  getProducts(page: number, size: number, valueFilter?: string, sort: string = 'name,asc') {
+    let params = new HttpParams()
+      .set('page', page)
+      .set('size', size)
+      .set('sort', sort);
+
+    let endpoint = this.url;
+
+    if (valueFilter && valueFilter.trim() !== '') {
+      params = params.set('term', valueFilter);
+      endpoint = this.url + '/search';
+    }
+
+    return this.http.get<any>(endpoint, {
+      params,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  }
+
+  /**
+   * Busca produtos paginados por categoria, com filtro e ordenação.
+   * @param page número da página
+   * @param size tamanho da página
+   * @param categoryId id da categoria
+   * @param valueFilter filtro de texto
+   * @param sort campo de ordenação (ex: 'name,asc' ou 'price,desc')
+   */
+  getProductsByCategory(page: number, size: number, categoryId: number, valueFilter?: string, sort: string = 'name,asc') {
+    let params = new HttpParams()
+      .set('page', page)
+      .set('size', size)
+      .set('sort', sort)
+
+    let endpoint = this.url + '/category/' + categoryId;
+
+    if (valueFilter && valueFilter.trim() !== '') {
+      params = params.set('term', valueFilter);
+    }
+
+    return this.http.get<any>(endpoint, {
+      params,
       headers: {
         Authorization: `Bearer ${token}`,
       },

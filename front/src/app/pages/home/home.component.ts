@@ -4,6 +4,8 @@ import {
   Component,
   ElementRef,
   ViewChild,
+  OnInit,
+  HostListener,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -21,6 +23,7 @@ import { ProductService } from '../../service/product.service';
 import { Category } from '../../model/category';
 import { Product } from '../../model/product';
 import { MatSelectModule } from '@angular/material/select';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-home',
@@ -37,36 +40,53 @@ import { MatSelectModule } from '@angular/material/select';
     MatIconModule,
     MatDividerModule,
     MatSelectModule,
+    MatProgressSpinnerModule,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HomeComponent {
-  @ViewChild('filter') filterInput?: ElementRef;
+export class HomeComponent implements OnInit {
   data: Product[] = [];
-  unfiltered: Product[] = [];
   categories: Category[] = [];
   valueFilter: any;
-  sort: any = 'name';
-  lastSort: any = 'name';
-  categoyFilter: any;
+  sort: string = 'name,asc'; // default sort
+  lastSort: string = 'name,asc';
+  categoryFilter: any;
+
+  // Infinite scroll state
+  page = 0;
+  size = 12;
+  loading = false;
+  lastPage = false;
+
+  sortOptions = [
+    { label: 'Name', value: 'name,asc' },
+    { label: 'Category', value: 'category,asc' },
+    { label: 'Price', value: 'price,asc' },
+    { label: 'Available', value: 'available,desc' },
+  ];
 
   constructor(
     private dialogService: DialogService,
     private categoryService: CategoryService,
     private productService: ProductService
-  ) {
-    this.getCategories();
-    this.getProducts();
-  }
+  ) {}
 
   ngOnInit(): void {
-    this.filterInput!.nativeElement.click(); // intentional error to force show refreshed list of products.
+    this.getCategories();
+    this.resetAndLoadProducts();
   }
 
-  productDialog(p?: Product) {
-    this.productService.openProductDialog(p);
+  @HostListener('window:scroll', [])
+  onScroll(): void {
+    if (
+      window.innerHeight + window.scrollY >= document.body.offsetHeight - 100 &&
+      !this.loading &&
+      !this.lastPage
+    ) {
+      this.loadMoreProducts();
+    }
   }
 
   private getCategories() {
@@ -75,17 +95,33 @@ export class HomeComponent {
       .subscribe((result) => (this.categories = result));
   }
 
-  private getProducts() {
-    this.productService.getProducts().subscribe((result) => {
-      this.unfiltered = result;
-      this.unfiltered.sort((e0, e1) => e0.name.localeCompare(e1.name));
-      this.data = result;
-    });
+  private resetAndLoadProducts() {
+    this.data = [];
+    this.page = 0;
+    this.lastPage = false;
+    this.loadMoreProducts();
+  }
+
+  private loadMoreProducts() {
+    this.loading = true;
+    this.productService
+      .getProducts(this.page, this.size, this.valueFilter, this.sort)
+      .subscribe((result) => {
+        this.data = [...this.data, ...result.content];
+        this.lastPage = result.last;
+        this.loading = false;
+        this.page++;
+      });
+  }
+
+  productDialog(p?: Product) {
+    this.productService.openProductDialog(p);
   }
 
   getCategoryName(id: number) {
     let label = '';
-    label = this.categories.filter((e) => e.id_category === id).at(0)!.name;
+    label =
+      this.categories.filter((e) => e.id_category === id).at(0)?.name || '';
     return label;
   }
 
@@ -114,90 +150,34 @@ export class HomeComponent {
   }
 
   applyFilter() {
-    this.data = this.unfiltered.filter(
-      (e) =>
-        e.name.includes(this.valueFilter) ||
-        this.getCategoryName(e.category).includes(this.valueFilter) ||
-        e.description?.includes(this.valueFilter) ||
-        (e.price + '').includes(this.valueFilter) ||
-        (e.price + '').includes(this.valueFilter) ||
-        (e.available + '').includes(this.valueFilter)
-    );
+    this.categoryFilter = '';
+    this.resetAndLoadProducts();
   }
 
   filterByCategory() {
-    this.valueFilter = this.categoyFilter;
-    this.applyFilter();
+    this.data = [];
+    this.page = 0;
+    this.lastPage = false;
+    this.loading = true;
+    this.productService
+      .getProductsByCategory(this.page, this.size, this.categoryFilter, this.valueFilter, this.sort)
+      .subscribe((result) => {
+        this.data = [...this.data, ...result.content];
+        this.lastPage = result.last;
+        this.loading = false;
+        this.page++;
+      });
   }
 
   clearFilter() {
     this.valueFilter = '';
-    this.categoyFilter = '';
-    this.data = this.unfiltered;
-    this.sort = 'name';
+    this.categoryFilter = '';
+    this.resetAndLoadProducts();
+    this.sort = 'name,asc';
   }
 
-  sortProducts(method: string) {
-    switch (this.sort) {
-      case 'name':
-        if (this.sort == this.lastSort) {
-          this.data = this.unfiltered.sort((e0, e1) =>
-            e1.name.localeCompare(e0.name)
-          );
-          this.lastSort = 'reset';
-        } else {
-          this.data = this.unfiltered.sort((e0, e1) =>
-            e0.name.localeCompare(e1.name)
-          );
-          this.lastSort = this.sort;
-        }
-        break;
-      case 'category':
-        if (this.sort == this.lastSort) {
-          this.data = this.unfiltered.sort((e0, e1) =>
-            this.getCategoryName(e1.category).localeCompare(
-              this.getCategoryName(e0.category)
-            )
-          );
-          this.lastSort = 'reset';
-        } else {
-          this.data = this.unfiltered.sort((e0, e1) =>
-            this.getCategoryName(e0.category).localeCompare(
-              this.getCategoryName(e1.category)
-            )
-          );
-          this.lastSort = this.sort;
-        }
-        break;
-      case 'price':
-        if (this.sort == this.lastSort) {
-          this.data = this.unfiltered.sort((e0, e1) =>
-            e1.price.toPrecision(21).localeCompare(e0.price.toPrecision(21))
-          );
-          this.lastSort = 'reset';
-        } else {
-          this.data = this.unfiltered.sort((e0, e1) =>
-            e0.price.toPrecision(21).localeCompare(e1.price.toPrecision(21))
-          );
-          this.lastSort = this.sort;
-        }
-        break;
-      case 'available':
-        if (this.sort == this.lastSort) {
-          this.data = this.unfiltered.sort(
-            (e0, e1) => e1.available - e0.available
-          );
-          this.lastSort = 'reset';
-        } else {
-          this.data = this.unfiltered.sort(
-            (e0, e1) => e0.available - e1.available
-          );
-          this.lastSort = this.sort;
-        }
-        break;
-
-      default:
-        break;
-    }
+  sortProducts(sortValue: string) {
+    this.sort = sortValue;
+    this.resetAndLoadProducts();
   }
 }

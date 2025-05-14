@@ -15,12 +15,12 @@
     <mat-grid-tile [colspan]="1" [rowspan]="1">
       <mat-form-field class="mat-mdc-form-field" style="margin-top: 15px;">
         <mat-label>Filter By Category</mat-label>
-        <mat-select [(ngModel)]="categoyFilter" (ngModelChange)="filterByCategory()">
-          @for (c of categories; track categoyFilter) {
-          <mat-option [value]="c.name">{{c.name}}</mat-option>
+        <mat-select [(ngModel)]="categoryFilter" (ngModelChange)="filterByCategory()">
+          @for (c of categories; track categoryFilter) {
+          <mat-option [value]="c.id_category">{{c.name}}</mat-option>
           }
         </mat-select>
-        @if (categoyFilter) {
+        @if (categoryFilter) {
         <button matSuffix mat-icon-button aria-label="Clear" (click)="clearFilter()">
           <mat-icon>close</mat-icon>
         </button>
@@ -41,15 +41,12 @@
     <mat-grid-tile [colspan]="2" [rowspan]="1">
       <h3>Sort Products:</h3>
       &nbsp;
-      <mat-button-toggle-group name="sorting" aria-label="Sort Products" [(ngModel)]="sort">
-        <mat-button-toggle ngDefaultControl style="color: black;" value="name" (click)="sortProducts(lastSort)">Name
+      <mat-button-toggle-group class="toggle-group" name="sorting" aria-label="Sort Products" [(ngModel)]="sort"
+        (change)="sortProducts(sort)">
+        <mat-button-toggle [class]="sort == opt.value ? 'active' : 'toggle-group'" *ngFor="let opt of sortOptions"
+          [value]="opt.value">
+          {{ opt.label }}
         </mat-button-toggle>
-        <mat-button-toggle ngDefaultControl style="color: black;" value="category" (click)="sortProducts(lastSort)">
-          Category</mat-button-toggle>
-        <mat-button-toggle ngDefaultControl style="color: black;" value="price" (click)="sortProducts(lastSort)">Price
-        </mat-button-toggle>
-        <mat-button-toggle ngDefaultControl style="color: black;" value="available" (click)="sortProducts(lastSort)">
-          Available</mat-button-toggle>
       </mat-button-toggle-group>
     </mat-grid-tile>
   </mat-grid-list>
@@ -88,4 +85,11 @@
       </mat-card>
     </mat-grid-tile>
   </mat-grid-list>
+  <!-- Infinite scroll loading indicator -->
+  <div *ngIf="loading" style="text-align:center; margin: 20px;">
+    <mat-spinner></mat-spinner>
+  </div>
+  <div *ngIf="lastPage && data.length > 0" style="text-align:center; margin: 20px;">
+    <span>No more products to load.</span>
+  </div>
 </section>

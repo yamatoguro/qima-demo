@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import com.qima.demo.model.Product;
 import com.qima.demo.repository.ProductRepository;
@@ -41,11 +43,19 @@ public class ProductService {
         return repository.findById(id).get();
     }
 
-    public List<Product> findAllByCategory(Product p) {
-        return repository.findByCategory(p.getCategory());
+    public Page<Product> findAllByCategory(long id, Pageable pageable) {
+        return repository.findByCategory(id, pageable);
     }
 
     public List<Product> filterProducts(String termo) {
         return repository.filter(termo);
+    }
+
+    public Page<Product> filterProductsPaged(String termo, Pageable pageable) {
+        return repository.filter(termo, pageable);
+    }
+
+    public Page<Product> findAllPaged(Pageable pageable) {
+        return repository.findAll(pageable);
     }
 }
